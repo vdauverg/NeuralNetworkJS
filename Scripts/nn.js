@@ -51,7 +51,7 @@ class Layer {
 	initSynapses(next) {
 		this.next = next;
 		this.neurons.forEach(n => {
-			n.initSynapses(next);
+			n.initSynapses(next.neurons);
 		});
 	}
 
@@ -97,25 +97,27 @@ class NN {
 			cost += Math.pow((this.out.neurons[i].value - output[i]), 2);
 		}
 
-		console.log(cost / output.length);
 		return cost / output.length;
 	}
 
 	backPropagate(output) {
 		let cost = this.calcCost(output);
+		console.log(cost);
 		
 		for (let i = 0; i < this.out.width; i++) {
-			this.out.neurons[i].value *= cost * this.out.neurons[i].cost(output[i]) * sigDer(this.activation, output[i]);
+			this.out.neurons[i].value *= this.out.neurons[i].cost(output[i]) * sigDer(this.activation, output[i]);
 		}
 
-		for (let i = this.depth - 2; i >= 0; i--) {
+		for (let i = this.depth - 1; i >= 0; i--) {
 			this.layers[i].neurons.forEach(n => {
-				n.value *= n.synapses.forEach(s => {
-					let c = cost * s.src.cost(s.dst.value) * sigDer(this.activation, s.dst.value);
+				console.log(i);
+				let m = 0;
+				n.synapses.forEach(s => {
+					let c = s.src.cost(s.dst.value) * sigDer(this.activation, s.dst.value);
 					s.weight *= c;
-					console.log(c, s.weight);
-					return c;
+					m += c;
 				})
+				n.value *= m;
 			})
 		}
 	}
