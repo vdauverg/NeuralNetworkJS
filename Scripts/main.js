@@ -1,9 +1,16 @@
 let disp = document.getElementById("display");
 
-let nn = new NN(9, 7, 2, 16, (x) => {return Math.E**x / (1 + Math.E**x);});
+// let nn = new NN(9, 7, 2, 16, (x) => {return Math.E**x / (1 + Math.E**x);});
+let nn = new NN((x) => {return Math.E**x / (1 + Math.E**x);});
 
 let input = [1,0,0,1,0,0,1,0,0];
 let output = [1,0,0,0,0,0,0];
+
+nn.addLayer(9);
+for (let i = 0; i < 2; i++)
+	nn.addLayer(8);
+nn.addLayer(7);
+nn.makeSynapses();
 
 nn.layers.forEach(l => {
 	let layer = document.createElement("div");
@@ -18,7 +25,7 @@ nn.layers.forEach(l => {
 })
 
 function display() {
-	for (let i = 0; i < nn.depth + 1; i++) {
+	for (let i = 0; i <= nn.depth; i++) {
 		for (let j = 0; j < nn.layers[i].neurons.length; j++) {
 			disp.childNodes[i].childNodes[j].textContent = nn.layers[i].neurons[j].value.toPrecision(3);
 		}
@@ -28,7 +35,7 @@ function display() {
 display();
 
 function btn_runEpoch() {
-	nn.runEpoch(input);
+	nn.feedforward(input);
 	display();
 }
 
