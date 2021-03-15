@@ -1,15 +1,14 @@
 #display {
-	width: 400px;
-	height: 400px;
 	background: lightblue;
 	margin: none;
 	padding: none;
+	display: flex;
 }
 
 .layer {
 	width: 40px;
 	border: 1px solid black;
-	float: left;
+	margin: auto;
 }
 
 .neuron {
@@ -18,6 +17,8 @@
 	border: 1px solid black;
 	border-radius: 50%;
 	margin: auto;
+	margin-top: 2px;
+	margin-bottom: 2px;
 	font-size: x-small;
 	text-align: center;
 }
